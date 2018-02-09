@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstring>
 #include <string>
 #include "src/environment.h"
 #include "src/parser.h"

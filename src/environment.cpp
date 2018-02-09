@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <map>
+#include <cstring>
 #include <string>
 #include <unistd.h>
 

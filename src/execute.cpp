@@ -65,18 +65,15 @@ int call(char* command_name) {
     // Fork returns 0 to the child and the pid of the child to the parent.
     if(pid == 0){
         // TODO: Properly pass arg Vs when we start to parse args for reals
-        printf("Child running command %s\n", command_name);
-        char* pwdname = "PWD";
-        printf("PWD getenv returned %s\n", getenv(pwdname));
-
         int retval = execvp(command_name, argv);
         if(retval == -1) {
             if (errno == 2) {
                 printf("ERROR: Could not find program '%s'\n", command_name);
-            } else if (errno == EACCES) {
-                printf("ERROR: You do not have permission to run '%s'\n", command_name);
+            //} else if (errno == EACCES) {
+            //    printf("ERROR: You do not have permission to run '%s'\n", command_name);
             } else {
-                printf("ERROR: Could not run program '%s'; error number returned: %d\n", command_name, errno);
+                //printf("ERROR: Could not run program '%s'; error number returned: %d\n", command_name, errno);
+                printf("ERROR: Could not find program '%s'\n", command_name);
             }
             exit(EXIT_FAILURE);
         }
