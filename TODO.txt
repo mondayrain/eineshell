@@ -1,0 +1,21 @@
+# TODO
+
+- Properly figure out if a command exists or not within the path
+- Return proper error codes for executing non built-in command
+- Proper command parsing
+    - Delimit input string by spaces and put into array/vector
+    - Pass proper arguments into execve
+- Implement cd
+- Implement getenv and setenv builtins
+- Find correct ENV VAR for macbook to ls
+- Make eineshell default shell in sshcs
+    - Read ENV VARs from file? How does bash get its initial env vars (what launches it and gives it its ENV VARs?)
+    - How to permanently change environment variables?
+- Get top to work in shell
+- Implement signal handling for ctrl-c
+- Implement job control (bg and fg commands?)
+    - Run a process in the background and keep pid
+    - List background processes
+    - Bring process back into the foreground
+- Implement command line history using readline as well as movement
+- Get tmux to work
