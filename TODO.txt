@@ -1,0 +1,10 @@
+- Env var to work on OSX
+- Get rid of redundant local ENV VARs, e.g. we don't need a local PWD and OLD_PWD (comes with operating system)
+- Parse arguments correctly into an array that can be handed to execve
+- Implement chdir
+- Implement setenv
+- Set up signal handler, so we can handle ctrl-x, ctrl-c, etc
+- Properly hold/display child and parent PIDs
+- Implement job control
+- Be able to set eineshell as the default shell for a user
+
