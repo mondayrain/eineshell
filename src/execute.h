@@ -10,6 +10,10 @@ bool is_built_in(char* command_name);
 
 int call_built_in(char* command_name);
 
+bool is_built_in_with_args(char* command_name);
+
+int call_built_in_with_args(char* command_name, char* arg);
+
 int call(char* command_name);
 
 int execute_command(char* command_name);

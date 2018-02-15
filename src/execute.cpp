@@ -17,6 +17,9 @@ int execute_command(char* command_name) {
  * */
     if(is_built_in(command_name)) {
         return call_built_in(command_name);
+    } else if (is_built_in_with_args(command_name)) {
+        // TODO: Pass arguments
+        return call_built_in_with_args(command_name, NULL);
     } else {
         // If the command is not built in, we have to 1) look in our path to find out if
         // the program exists, and 2) spawn program into child process.
@@ -37,8 +40,8 @@ bool is_built_in(char* command_name) {
 }
 
 int call_built_in(char* command_name) {
-    for(int i=0; i < NUM_BUILTINS; i++) {
-        if(strcmp(command_name, BUILTINS[i]) == 0) {
+    for (int i = 0; i < NUM_BUILTINS; i++) {
+        if (strcmp(command_name, BUILTINS[i]) == 0) {
             return BUILTIN_FUNCTIONS[i]();
         }
     }
@@ -46,6 +49,27 @@ int call_built_in(char* command_name) {
     // Theoretically this should never happen
     return -1;
 }
+
+bool is_built_in_with_args(char* command_name) {
+    for(int i=0; i < NUM_BUILTINS_WITH_ARGS; i++) {
+        if(strcmp(command_name, BUILTINS_WITH_ARGS[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int call_built_in_with_args(char* command_name, char* arg) {
+    for (int i = 0; i < NUM_BUILTINS_WITH_ARGS; i++) {
+        if (strcmp(command_name, BUILTINS_WITH_ARGS[i]) == 0) {
+            return BUILTIN_FUNCTIONS_WITH_ARGS[i](arg);
+        }
+    }
+
+    // Theoretically this should never happen
+    return -1;
+}
+
 
 int call(char* command_name) {
     // TODO: Actually properly look in env var PATH
