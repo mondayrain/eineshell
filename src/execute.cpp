@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
-#include <string.h>
 #include "environment.h"
 #include "execute.h"
 #include "builtin.h"
@@ -73,7 +72,7 @@ int call_built_in_with_args(char* command_name, char* arg) {
 
 int call(char* command_name) {
     // TODO: Actually properly look in env var PATH
-    char file_path[50];;
+    char file_path[50];
     sprintf(file_path, "%s/%s!", "/bin", command_name);
 
     // Build argv

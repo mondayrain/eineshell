@@ -17,5 +17,6 @@
     - Run a process in the background and keep pid
     - List background processes
     - Bring process back into the foreground
+- Handle a bunch of whitespaces in the command
 - Implement command line history using readline as well as movement
 - Get tmux to work

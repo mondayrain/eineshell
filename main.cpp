@@ -26,21 +26,18 @@ int main(int argc, char **argv) {
 }
 
 void run_repl_loop() {
-    char* command;
+    char* input;
+    char** tokens;
     int exit_called = 0;
 
     // TODO: How do we handle ctrl-c / ctrl-x / ctrl-z?
     do {
         print_prompt();
+        input = read_input_line();
 
-        // We assume that the input is a valid one-word command, even though `read_input_line` reads an entire line.
-        // TODO: Properly parse input to handle multiple tokens
-        command = read_input_line();
-
-        // TODO: For now we're only handling 1-word commands; we want to be
-        // able to handle flags, pipes, etc in the future
-        if(strlen(command) > 0) {
-            exit_called = execute_command(command);
+        if(strlen(input) > 0) {
+            tokens = parse_input_line(input);
+            exit_called = execute_command(input);
         }
     } while (!exit_called);
 }
