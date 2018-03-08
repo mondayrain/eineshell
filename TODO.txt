@@ -1,8 +1,5 @@
 # TODO
 
-- Proper command parsing
-    - Delimit input string by spaces and put into array/vector
-    - Pass proper arguments into execve
 - Implement cd
 - Implement getenv and setenv builtins
 - Implement signal handling for ctrl-c
