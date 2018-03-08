@@ -1,10 +1,15 @@
 #include<stdio.h>
+#include <unistd.h>
 #include<string>
 #include<vector>
 #include "environment.h"
 
 using std::string;
 using std::vector;
+using std::distance;
+
+#include<iostream>
+using std::cout;
 
 /*-----------------*/
 /* -- HELPERS -- */
@@ -19,7 +24,13 @@ char* _getenvvar(const char* env_var_name) {
 /* -- FUNCTIONS -- */
 /*-----------------*/
 int pwd() {
-    printf("%s\n\n", ENV_VARS_MAP[std::string("CWD")].c_str());
+    char cwd[MAX_PATH_LENGTH];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("%s\n\n", cwd);
+    } else {
+        perror("`pwd` error");
+    }
+
     return 0;
 }
 
@@ -54,15 +65,34 @@ int printenv(std::vector<std::string>::iterator args_begin, std::vector<std::str
 // TODO: setenv method.
 // See: https://www.gnu.org/software/libc/manual/html_node/Environment-Access.html#Environment-Access
 
-int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end){
-    printf("ERROR: Builtin command `cd` not yet implemented\n\n");
-    /*
-     * chdir
-     * see https://www.gnu.org/software/libc/manual/html_node/Working-Directory.html#Working-Directory
-     *
-     */
-    return 0;
+int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) {
+    int num_args = std::distance(args_begin, args_end);
+    int retval = 0;
 
+    std::cout << "\nnum_args: " << num_args;
+
+    // If there is more than 1 argument, just error out
+    if (num_args > 1) {
+        printf("USAGE: cd [PATH]\n\n");
+        return 0;
+    } else if (num_args == 0 || *args_begin == std::string("~")) {
+        // If there are no arguments or the arg is ~, just go to the user's home
+        retval = chdir(ENV_VARS_MAP[std::string("PROMPT")].c_str());
+    } else if (*args_begin == std::string(".")) {
+        retval = 0;
+    } else if (*args_begin == std::string("..")) {
+        // if the argument is .., go up one directory
+        // TODO
+    } else {
+        // If the argument is anything else, go to that directory
+        retval = chdir(getenv("HOME"));
+    }
+
+    if (retval == -1) {
+        perror("`cd` error");
+    }
+
+    return 0;
 }
 
 int exit() {

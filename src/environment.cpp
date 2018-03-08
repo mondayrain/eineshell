@@ -48,14 +48,8 @@ int set_up_environment(int argc, char **argv) {
     struct passwd *user_info = getpwnam(username_buf);
     char *home_dir = user_info->pw_dir;
 
-    // Get PID and Parent PID
-    // TODO: This is wrong doesn't work right
-    ENV_VARS_MAP[std::string("PID")] = getpid();
-    ENV_VARS_MAP[std::string("PARENT_PID")] = getppid();
-
     // Update our local env vars for easy use
     ENV_VARS_MAP[std::string("HOME_DIR")] = home_dir;
-    ENV_VARS_MAP[std::string("CWD")] = home_dir;
 
 
     // Set env vars on actual system

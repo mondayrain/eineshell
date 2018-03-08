@@ -4,7 +4,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string>
-#include <algorithm>
 #include "environment.h"
 #include "execute.h"
 #include "builtin.h"
@@ -28,7 +27,7 @@ int execute_command(std::vector<std::string> tokens) {
     if(is_built_in(command_name)) {
         return call_built_in(command_name);
     } else if (is_built_in_with_args(command_name)) {
-        return call_built_in_with_args(command_name, tokens.begin(), tokens.end());
+        return call_built_in_with_args(command_name, tokens.begin()+1, tokens.end());
     } else {
         return call(tokens);
     }
