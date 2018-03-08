@@ -110,13 +110,15 @@ int call(std::vector<std::string> tokens) {
         }
         exit(EXIT_SUCCESS);
     } else {
-        // TODO: SEE Process Completion Statuses
-        // https://www.gnu.org/software/libc/manual/html_node/Process-Completion-Status.html#Process-Completion-Status
         int status;
         pid_t child_pid = waitpid(pid, &status, 0);
-        if(status == -1) {
-            printf("ERROR: Could not run program '%s'\n\n", command_name);
-            return -1;
+        if(status != NULL) {
+            if(WIFSIGNALED(status)) {
+                printf("Program '%s terminated by a signal'\n\n", command_name);
+            } else {
+                printf("ERROR: Could not run program '%s'\n\n", command_name);
+                return -1;
+            }
         }
 
         printf("\n");
