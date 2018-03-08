@@ -1,12 +1,15 @@
 /* Main program for eineshell */
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <cstring>
 #include <string>
+#include <vector>
 #include "src/environment.h"
 #include "src/parser.h"
 #include "src/execute.h"
+
+using std::string;
+using std::vector;
 
 void run_repl_loop();
 void print_prompt();
@@ -26,18 +29,18 @@ int main(int argc, char **argv) {
 }
 
 void run_repl_loop() {
-    char* input;
-    char** tokens;
+    string input;
+    std::vector<std::string> tokens;
     int exit_called = 0;
 
-    // TODO: How do we handle ctrl-c / ctrl-x / ctrl-z?
+    // TODO: Handle ctrl-c / ctrl-x / ctrl-z?
     do {
         print_prompt();
         input = read_input_line();
 
-        if(strlen(input) > 0) {
-            tokens = parse_input_line(input);
-            exit_called = execute_command(input);
+        if(input.length() > 0) {
+            tokens = parse_into_tokens(input);
+            exit_called = execute_command(tokens);
         }
     } while (!exit_called);
 }

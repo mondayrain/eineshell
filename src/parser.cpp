@@ -1,41 +1,39 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
+#include <vector>
+#include <iostream>
 #include "parser.h"
-#include "helpers.h"
 
-int MAX_COMMAND_TOKEN_LENGTH = 100;
+using std::string;
+using std::vector;
+using std::cin;
 
-char** parse_input_line(char *input) {
-    char *tokens[MAX_COMMAND_TOKEN_LENGTH];
-    int num_tokens = split_into_tokens(input, " ", tokens);
-    printf("Num of tokens in input '%s': %d\n\n", input, num_tokens);
+std::string INPUT_DELIMITER = " ";
 
-    char **return_array = (char **) malloc(num_tokens);
-    for(int i=0; i < num_tokens; i++) {
-        return_array[i] = tokens[i];
-    }
-
-    printf("Returning token array with: ");
-    for(int i=0; i < num_tokens; i++) {
-        printf("%s ", tokens[i]);
-    }
-
-    return return_array;
-}
-
-char* read_input_line() {
-    char *line = NULL;
-    size_t bufsize = 0;
-    int result = getline(&line, &bufsize, stdin);
-    if (result == -1) {
-        // TODO: What error to raise when we don't
-        // read the line properly? When would this happen?
-        exit(1);
-    }
-
-    // Remove the newline character
-    line[strlen(line)-1] = 0;
+std::string read_input_line() {
+    // TODO: Trim leading/trailing whitespaces http://www.toptip.ca/2010/03/trim-leading-or-trailing-white-spaces.html
+    std::string line = NULL;
+    std::getline(std::cin, line);
     return line;
 }
 
+std::vector<std::string> parse_into_tokens(std::string input, std::string delimiter) {
+    std::vector<std::string> tokens;
+    std::string current_token;
+
+    if(delimiter.empty()) {
+        delimiter = INPUT_DELIMITER;
+    }
+
+    size_t position = 0;
+    while((position = input.find(INPUT_DELIMITER)) != std::string::npos) {
+        current_token = input.substr(0, position);
+        tokens.push_back(current_token);
+        input.erase(0, position + INPUT_DELIMITER.length());
+    }
+
+    tokens.push_back(input);
+
+    return tokens;
+}

@@ -1,17 +1,12 @@
-#include <cstring>
+#include <string>
 
-/* Split a string into an array of tokens.
- * Will write the tokens into the token_buf,
- * and return the # of tokens.
- */
-int split_into_tokens(char *str, const char* delimiter, char* token_buf[]) {
-    int i = 0;
-    token_buf[i] = strtok(str, delimiter);
+using std::string;
 
-    while(token_buf[i]!=NULL)
-    {
-        token_buf[++i] = strtok(NULL, delimiter);
-    }
 
-    return i;
+/* Converts a std::string to a char* */
+char *convert(const std::string & s)
+{
+    char *pc = new char[s.size()+1];
+    std::strcpy(pc, s.c_str());
+    return pc;
 }

@@ -1,5 +1,11 @@
 #ifndef EINESHELL_HELPERS_H
 #define EINESHELL_HELPERS_H
 
-int split_into_tokens(char *str, const char* delimiter, char* token_buf[]);
+#include <string>
+
+using std::string;
+
+// Converts a std::string to a char*
+char *convert(const std::string & s);
+
 #endif //EINESHELL_HELPERS_H

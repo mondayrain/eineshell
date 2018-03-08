@@ -3,20 +3,20 @@
 
 int pwd();
 
-int cd(const char* argname=NULL);
+int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end);
 
-int printenv(const char* envname=NULL);
+int printenv();
+
+int printenv(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end);
 
 int exit();
 
-char* _getenvvar(const char* env_var_name);
+char* _getenvvar(std::vector<std::string> args);
 
-const int NUM_BUILTINS = 2;
-const char *BUILTINS[] = { "pwd", "exit" };
-int (*BUILTIN_FUNCTIONS[])() = { pwd, exit };
+std::vector<std::string> BUILTINS { "pwd", "exit", "printenv" };
+int (*BUILTIN_FUNCTIONS[])() = { pwd, exit, printenv };
 
-const int NUM_BUILTINS_WITH_ARGS = 2;
-const char *BUILTINS_WITH_ARGS[] = { "cd", "printenv" };
-int (*BUILTIN_FUNCTIONS_WITH_ARGS[])(const char *) = { cd, printenv };
+std::vector<std::string> BUILTINS_WITH_ARGS { "cd", "printenv" };
+int (*BUILTIN_FUNCTIONS_WITH_ARGS[])(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) = { cd, printenv };
 
 #endif //EINESHELL_BUILTIN_H
