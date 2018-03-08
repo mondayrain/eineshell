@@ -4,10 +4,12 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "src/environment.h"
 #include "src/parser.h"
 #include "src/execute.h"
 
+using std::cout;
 using std::string;
 using std::vector;
 
@@ -29,7 +31,7 @@ int main(int argc, char **argv) {
 }
 
 void run_repl_loop() {
-    string input;
+    std::string input;
     std::vector<std::string> tokens;
     int exit_called = 0;
 
@@ -46,6 +48,6 @@ void run_repl_loop() {
 }
 
 void print_prompt() {
-    printf("|%s| %s >> ", ENV_VARS_MAP[std::string("PROMPT")].c_str(), ENV_VARS_MAP[std::string("USERNAME")].c_str());
+    std::cout << ENV_VARS_MAP[std::string("PROMPT")] << " " << ENV_VARS_MAP[std::string("USERNAME")] << " >> ";
 }
 

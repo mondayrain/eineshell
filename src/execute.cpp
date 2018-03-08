@@ -79,20 +79,19 @@ int call(std::vector<std::string> tokens) {
     char *command_name = (char *) tokens[0].c_str();
     char *empty_argv[] = { command_name, NULL };
     std::vector<char*> args_array;
-    bool has_arguments = false;
 
     if (tokens.size() > 1) {
-        has_arguments = true;
-        std::transform(tokens.begin() + 1, tokens.end(), std::back_inserter(args_array), convert);
+        std::transform(tokens.begin(), tokens.end(), std::back_inserter(args_array), convert);
     }
 
     // Fork and execute!
     pid_t pid = fork();
     // At this point, both child and parent are exactly the same.
     // Fork returns 0 to the child and the pid of the child to the parent.
+
     if(pid == 0){
         int retval;
-        if (has_arguments) {
+        if (tokens.size() > 1) {
             retval = execvp(command_name,  &args_array[0]);
         } else {
             retval = execvp(command_name, empty_argv);

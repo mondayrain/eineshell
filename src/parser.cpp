@@ -8,12 +8,13 @@
 using std::string;
 using std::vector;
 using std::cin;
+using std::cout;
 
 std::string INPUT_DELIMITER = " ";
 
 std::string read_input_line() {
     // TODO: Trim leading/trailing whitespaces http://www.toptip.ca/2010/03/trim-leading-or-trailing-white-spaces.html
-    std::string line = NULL;
+    std::string line;
     std::getline(std::cin, line);
     return line;
 }
@@ -34,6 +35,5 @@ std::vector<std::string> parse_into_tokens(std::string input, std::string delimi
     }
 
     tokens.push_back(input);
-
     return tokens;
 }

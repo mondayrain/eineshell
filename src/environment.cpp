@@ -64,7 +64,6 @@ int set_up_environment(int argc, char **argv) {
     setenv("LOGNAME", username_buf, 1);
     // setenv ("PATH", home_dir, 1);
 
-
     // If eineshell was called by another shell, we need to reset the env vars
 //    if((argc == 2) && !strcmp(argv[1], ENV_VARS_MAP[std::string("EINESHELL_PATH")].c_str())) {
 //        // sentenv stuff
