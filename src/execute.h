@@ -13,6 +13,8 @@ extern std::map<pid_t, std::string> PID_MAP;
 
 bool is_built_in(std::string command_name);
 
+bool is_built_in_with_args(std::string command_name);
+
 int call_built_in(std::string command_name);
 
 int call_built_in_with_args(std::string command_name, std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end);

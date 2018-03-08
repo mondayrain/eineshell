@@ -1,9 +1,7 @@
 #include<stdio.h>
 #include<string>
 #include<vector>
-#include <stdlib.h>
 #include "environment.h"
-
 
 using std::string;
 using std::vector;
@@ -46,10 +44,11 @@ int printenv(std::vector<std::string>::iterator args_begin, std::vector<std::str
             printf("\n\n");
         }
 
-        return 0;
+
     }*/
 
     printf("ERROR: Builtin command `printenv <args> `not yet implemented\n\n");
+    return 0;
 }
 
 // TODO: setenv method.

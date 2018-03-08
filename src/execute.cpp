@@ -26,12 +26,9 @@ int execute_command(std::vector<std::string> tokens) {
     // https://www.gnu.org/software/libc/manual/html_node/Error-Messages.html#Error-Messages
     std::string command_name = tokens[0];
     if(is_built_in(command_name)) {
-        if(tokens.size() == 1) {
-            return call_built_in(command_name);
-        } else {
-            return call_built_in_with_args(command_name, tokens.begin() + 1, tokens.end());
-        }
-
+        return call_built_in(command_name);
+    } else if (is_built_in_with_args(command_name)) {
+        return call_built_in_with_args(command_name, tokens.begin(), tokens.end());
     } else {
         return call(tokens);
     }
@@ -43,7 +40,10 @@ bool is_built_in(std::string command_name) {
             return true;
         }
     }
+    return false;
+}
 
+bool is_built_in_with_args(std::string command_name) {
     for(int i=0; i < BUILTINS_WITH_ARGS.size(); i++) {
         if(command_name.compare(BUILTINS_WITH_ARGS[i]) == 0) {
             return true;
