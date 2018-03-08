@@ -69,15 +69,13 @@ int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::
     int num_args = std::distance(args_begin, args_end);
     int retval = 0;
 
-    std::cout << "\nnum_args: " << num_args;
-
     // If there is more than 1 argument, just error out
     if (num_args > 1) {
         printf("USAGE: cd [PATH]\n\n");
         return 0;
     } else if (num_args == 0 || *args_begin == std::string("~")) {
         // If there are no arguments or the arg is ~, just go to the user's home
-        retval = chdir(ENV_VARS_MAP[std::string("PROMPT")].c_str());
+        retval = chdir(ENV_VARS_MAP[std::string("HOME_DIR")].c_str());
     } else if (*args_begin == std::string(".")) {
         retval = 0;
     } else if (*args_begin == std::string("..")) {
@@ -85,7 +83,7 @@ int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::
         // TODO
     } else {
         // If the argument is anything else, go to that directory
-        retval = chdir(getenv("HOME"));
+        retval = chdir((*args_begin).c_str());
     }
 
     if (retval == -1) {
