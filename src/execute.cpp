@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <string>
+#include <algorithm>
 #include "environment.h"
 #include "execute.h"
 #include "builtin.h"
