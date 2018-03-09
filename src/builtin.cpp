@@ -90,6 +90,7 @@ int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::
         perror("`cd` error");
     }
 
+    printf("\n");
     return 0;
 }
 
