@@ -1,7 +1,8 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <unistd.h>
-#include<string>
-#include<vector>
+#include <libgen.h>
+#include <string>
+#include <vector>
 #include "environment.h"
 
 using std::string;
@@ -79,8 +80,12 @@ int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::
     } else if (*args_begin == std::string(".")) {
         retval = 0;
     } else if (*args_begin == std::string("..")) {
-        // if the argument is .., go up one directory
-        // TODO
+        char cwd[MAX_PATH_LENGTH];
+        if(getcwd(cwd, sizeof(cwd)) != NULL) {
+            retval = chdir(dirname(cwd));
+        } else {
+            retval = -1;
+        }
     } else {
         // If the argument is anything else, go to that directory
         retval = chdir((*args_begin).c_str());
