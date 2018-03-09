@@ -81,7 +81,11 @@ int call(std::vector<std::string> tokens) {
     std::vector<char*> args_array;
 
     if (tokens.size() > 1) {
-        std::transform(tokens.begin(), tokens.end(), std::back_inserter(args_array), convert);
+        if (tokens[tokens.size()-1] == "&") {
+            std::transform(tokens.begin(), tokens.end()-1, std::back_inserter(args_array), convert);
+        } else { 
+            std::transform(tokens.begin(), tokens.end(), std::back_inserter(args_array), convert);
+        }
     }
 
     // Fork and execute!
@@ -111,6 +115,11 @@ int call(std::vector<std::string> tokens) {
         exit(EXIT_SUCCESS);
     } else {
         int status;
+
+        if(tokens[tokens.size()-1] == "&") {
+            return 0;
+        }
+
         pid_t child_pid = waitpid(pid, &status, 0);
         if(status != NULL) {
             if(WIFSIGNALED(status)) {
