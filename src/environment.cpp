@@ -9,6 +9,7 @@
 int MAX_USERNAME_LENGTH = 64;
 int MAX_PATH_LENGTH = 255;
 
+// TODO: Clean this up, we don't need a bunch of these
 std::map<std::string, std::string> ENV_VARS_MAP = {
         { std::string("PROMPT"), "|EINESHELL|" },
         { std::string("EINESHELL_PATH"), "" }, // TODO: This is a horrible way to do this
@@ -58,9 +59,5 @@ int set_up_environment(int argc, char **argv) {
     setenv("LOGNAME", username_buf, 1);
     // setenv ("PATH", home_dir, 1);
 
-    // If eineshell was called by another shell, we need to reset the env vars
-//    if((argc == 2) && !strcmp(argv[1], ENV_VARS_MAP[std::string("EINESHELL_PATH")].c_str())) {
-//        // sentenv stuff
-//    }
     return 0;
 }

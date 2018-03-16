@@ -18,18 +18,9 @@ void run_repl_loop();
 void print_prompt();
 void sig_handler(int signo);
 
-/* Signal handling:
- * int SIGTERM - The SIGTERM signal is a generic signal used to cause program termination.
-        The shell command kill generates SIGTERM by default.
- int SIGQUIT - similar to SIGINT, except that it’s controlled by a different key—the QUIT character, usually C-\—and produces a core dump when it terminates the process
-*/
-
 int main(int argc, char **argv) {
-    set_up_environment(argc, argv);
     // TODO: Read from a config file
-    // TODO: Set up signal handler:
-    // https://www.gnu.org/software/libc/manual/html_node/Basic-Signal-Handling.html#Basic-Signal-Handling
-    // https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c
+    set_up_environment(argc, argv);
 
     // RUN LOOP
     run_repl_loop();
@@ -39,6 +30,8 @@ int main(int argc, char **argv) {
 }
 
 void run_repl_loop() {
+    // Signal handling
+    // TODO: Why does a child process propogate CTRL-C signals to eineshell? Should not run this if child process is launched.
     if (signal (SIGINT, sig_handler) == SIG_IGN) {
         signal (SIGINT, SIG_IGN);
     }
@@ -63,7 +56,7 @@ void print_prompt() {
 }
 
 void sig_handler(int signo) {
-    // TODO: Handle ctrl-x / ctrl-z?
+    // TODO: Handle ctrl-z once job control implemented
 
     if (signo == SIGINT) {
         printf("\nReceived SIGINT from ctrl-c; terminating shell process\n\n");

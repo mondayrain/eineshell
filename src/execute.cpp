@@ -90,10 +90,11 @@ int call(std::vector<std::string> tokens) {
 
     // Fork and execute!
     pid_t pid = fork();
+
     // At this point, both child and parent are exactly the same.
     // Fork returns 0 to the child and the pid of the child to the parent.
-
     if(pid == 0){
+        // CHILD
         int retval;
         if (tokens.size() > 1) {
             retval = execvp(command_name,  &args_array[0]);
@@ -102,6 +103,7 @@ int call(std::vector<std::string> tokens) {
         }
 
         if(retval == -1) {
+            // TODO: Why aren't these returning what I expect?
             if (errno == 2) {
                 printf("ERROR: Could not find program '%s'\n", command_name);
             //} else if (errno == EACCES) {
@@ -114,9 +116,13 @@ int call(std::vector<std::string> tokens) {
         }
         exit(EXIT_SUCCESS);
     } else {
+        // PARENT
         int status;
 
+
+        // If we're running a background job, don't bother waiting
         if(tokens[tokens.size()-1] == "&") {
+            // TODO: Remove this when proper job control is implemented
             return 0;
         }
 
