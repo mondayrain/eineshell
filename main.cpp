@@ -16,7 +16,7 @@ using std::vector;
 
 void run_repl_loop();
 void print_prompt();
-void sig_handler(int signo);
+static void sig_handler(int signo);
 
 int main(int argc, char **argv) {
     // TODO: Read from a config file
@@ -32,9 +32,11 @@ int main(int argc, char **argv) {
 void run_repl_loop() {
     // Signal handling
     // TODO: Why does a child process propogate CTRL-C signals to eineshell? Should not run this if child process is launched.
-    if (signal (SIGINT, sig_handler) == SIG_IGN) {
-        signal (SIGINT, SIG_IGN);
-    }
+    struct sigaction sa;
+    sa.sa_handler = sig_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+    sigaction(SIGINT, &sa, NULL);
 
     std::string input;
     std::vector<std::string> tokens;
@@ -55,11 +57,13 @@ void print_prompt() {
     std::cout << ENV_VARS_MAP[std::string("PROMPT")] << " " << ENV_VARS_MAP[std::string("USERNAME")] << " >> ";
 }
 
-void sig_handler(int signo) {
-    // TODO: Handle ctrl-z once job control implemented
+static void sig_handler(int signo) {
 
-    if (signo == SIGINT) {
-        printf("\nReceived SIGINT from ctrl-c; terminating shell process\n\n");
-        exit(EXIT_SUCCESS);
+    switch(signo) {
+        case SIGINT:
+            printf("\nReceived SIGINT from ctrl-c; terminating shell process\n\n");
+            exit(EXIT_SUCCESS);
+
+        // TODO: Handle ctrl-z once job control implemented
     }
 }

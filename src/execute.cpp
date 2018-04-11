@@ -116,8 +116,7 @@ int call(std::vector<std::string> tokens) {
         exit(EXIT_SUCCESS);
     } else {
         // PARENT
-        int status;
-
+        int status = 0;
 
         // If we're running a background job, don't bother waiting
         if(tokens[tokens.size()-1] == "&") {
@@ -126,7 +125,7 @@ int call(std::vector<std::string> tokens) {
         }
 
         pid_t child_pid = waitpid(pid, &status, 0);
-        if(status != NULL) {
+        if(status != 0) {
             if(WIFSIGNALED(status)) {
                 printf("Program '%s terminated by a signal'\n\n", command_name);
             }

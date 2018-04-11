@@ -1,5 +1,4 @@
 # TODO
-- Find out why supporting '&' broke multiple command parsing and fix it
 - Find out why Ctrl-C kills `eineshell` process along with the child process that it is running
 - Clean up local ENV VARs being held
 - Return proper error codes for executing non built-in command
