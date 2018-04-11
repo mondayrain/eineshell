@@ -12,24 +12,13 @@ int MAX_PATH_LENGTH = 255;
 // TODO: Clean this up, we don't need a bunch of these
 std::map<std::string, std::string> ENV_VARS_MAP = {
         { std::string("PROMPT"), "|EINESHELL|" },
-        { std::string("EINESHELL_PATH"), "" }, // TODO: This is a horrible way to do this
         { std::string("USERNAME"), "" },
         { std::string("HOME_DIR"), "" },
-        { std::string("CWD"), "" },
-        { std::string("LAST_CWD"), "" },
-        { std::string("PATH"), "" },
-        { std::string("PID"), "" },
-        { std::string("PARENT_PID"), "" }
+        { std::string("PATH"), "" } // Currently unused
 };
 
 int set_up_environment(int argc, char **argv) {
-    // Clear environment variables if we need to
-    // TODO: This is a horrible way to do this
-    ENV_VARS_MAP[std::string("EINESHELL_PATH")] = argv[0];
-    // If eineshell was called by another shell, we need to reset the env vars
-    if((argc == 2) && !strcmp(argv[1], ENV_VARS_MAP[std::string("EINESHELL_PATH")].c_str())) {
-        // clearenv();
-    }
+    // TODO: Need to read from a config file if eineshell is being run as the default terminal
 
     // Get username
     int retval = 0;
@@ -57,6 +46,9 @@ int set_up_environment(int argc, char **argv) {
     setenv("HOME", home_dir, 1);
     setenv("PWD", home_dir, 1);
     setenv("LOGNAME", username_buf, 1);
+
+    // TODO: We currently inherit the path from the process that spawns us (i.e. bash)
+    // We need to set the path based on a config file if we set eineshell to be the default terminal
     // setenv ("PATH", home_dir, 1);
 
     return 0;

@@ -90,6 +90,10 @@ int call(std::vector<std::string> tokens) {
 
     // Fork and execute!
     pid_t pid = fork();
+    if (pid == -1) {
+        // Forking the child failed...
+        printf("ERROR: Couldn't spawn child process to run your command.");
+    }
 
     // At this point, both child and parent are exactly the same.
     // Fork returns 0 to the child and the pid of the child to the parent.

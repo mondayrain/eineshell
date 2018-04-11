@@ -19,7 +19,6 @@ void print_prompt();
 static void sig_handler(int signo);
 
 int main(int argc, char **argv) {
-    // TODO: Read from a config file
     set_up_environment(argc, argv);
 
     // RUN LOOP
@@ -31,7 +30,7 @@ int main(int argc, char **argv) {
 
 void run_repl_loop() {
     // Signal handling
-    // TODO: Why does a child process propogate CTRL-C signals to eineshell? Should not run this if child process is launched.
+    // ANSWER: ^C sends a SIGINT to all the processes in the foreground process group
     struct sigaction sa;
     sa.sa_handler = sig_handler;
     sigemptyset(&sa.sa_mask);
@@ -61,6 +60,8 @@ static void sig_handler(int signo) {
 
     switch(signo) {
         case SIGINT:
+            // TODO: If there is a child process currently in the foreground,
+            // terminate that child process instead of the shell
             printf("\nReceived SIGINT from ctrl-c; terminating shell process\n\n");
             exit(EXIT_SUCCESS);
 
