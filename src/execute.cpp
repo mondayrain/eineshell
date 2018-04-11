@@ -106,11 +106,10 @@ int call(std::vector<std::string> tokens) {
             // TODO: Why aren't these returning what I expect?
             if (errno == 2) {
                 printf("ERROR: Could not find program '%s'\n", command_name);
-            //} else if (errno == EACCES) {
-            //    printf("ERROR: You do not have permission to run '%s'\n", command_name);
+            } else if (errno == EACCES) {
+                printf("ERROR: You do not have permission to run '%s'\n", command_name);
             } else {
-                //printf("ERROR: Could not run program '%s'; error number returned: %d\n", command_name, errno);
-                printf("ERROR: Could not find program '%s'\n", command_name);
+                printf("ERROR: Could not run program '%s'; error number returned: %d\n", command_name, errno);
             }
             exit(EXIT_FAILURE);
         }
@@ -130,9 +129,9 @@ int call(std::vector<std::string> tokens) {
         if(status != NULL) {
             if(WIFSIGNALED(status)) {
                 printf("Program '%s terminated by a signal'\n\n", command_name);
-            } else {
-                printf("ERROR: Could not run program '%s'\n\n", command_name);
             }
+            // No need for an else since the child process will write the error message
+            // if it errored out
         }
 
         printf("\n");
