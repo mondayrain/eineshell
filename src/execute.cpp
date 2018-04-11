@@ -132,7 +132,6 @@ int call(std::vector<std::string> tokens) {
                 printf("Program '%s terminated by a signal'\n\n", command_name);
             } else {
                 printf("ERROR: Could not run program '%s'\n\n", command_name);
-                return -1;
             }
         }
 
