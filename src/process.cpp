@@ -29,6 +29,9 @@ void Process::print_background_processes() {
         if (retval != 0) {
             // Process doesn't exist! delete this node in the linked list
             Process* temp = curr;
+            if(curr == background_processes) {
+                background_processes = curr->next_process;
+            }
             curr = curr->next_process;
             delete temp;
         } else {
