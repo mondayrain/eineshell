@@ -27,20 +27,20 @@ void Process::setup_and_exec_process(bool foreground) {
  * Method called by a child process as soon as it has been forked.
  * It does the pgid & signal handling setup before calling exec on the
  * argument it should call.
- */
-    // If we want the child to be able to take control
-    // of the terminal *without* the parent, then it has to have its own
-    // process group id
-    setpgid(this->pid, this->pid);
+// */
 
-    // If the parent launched the child with the intent of
-    // making it the foreground process, then let it take control
-    // of the terminal.
-    if (foreground) {
-        printf("Setting child process running %s as the controlling terminal", this->command_name);
-        tcsetpgrp(terminal_fd, this->pid);
-        printf("Set child process running %s as the controlling terminal", this->command_name);
-    }
+      // TODO: None of this works...
+//    // If we want the child to be able to take control
+//    // of the terminal *without* the parent, then it has to have its own
+//    // process group id
+//    setpgid(this->pid, this->pid);
+//
+//    // If the parent launched the child with the intent of
+//    // making it the foreground process, then let it take control
+//    // of the terminal.
+//    if (foreground) {
+//        tcsetpgrp(terminal_fd, this->pid);
+//    }
 
     // The child inherits signal handling from the spawning process.
     // Since the spawning process is a shell (which ignores stuff like SIGINT in order

@@ -112,7 +112,8 @@ int call(std::vector<std::string> tokens) {
     // Fork returns 0 to the child and the pid of the child to the parent.
     if(pid == 0){
         // CHILD
-        // Create the Process object to be used (& //TODO: stored)
+        // Create the Process object to be used
+        pid_t pid = getpid();
         Process p = Process();
         if (tokens.size() > 1) {
             p = Process(command_name, &args_array[0], pid);
@@ -126,7 +127,12 @@ int call(std::vector<std::string> tokens) {
         // PARENT
         int status = 0;
 
-        pid_t child_pid = waitpid(pid, &status, 0);
+        if(foreground_command) {
+            pid_t child_pid = waitpid(pid, &status, 0);
+        } else {
+            // TODO:
+            // Keep track of background job somehow
+        }
         if(status != 0) {
             if(WIFSIGNALED(status)) {
                 printf("Program '%s terminated by a signal'\n\n", command_name);
