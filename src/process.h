@@ -8,13 +8,13 @@
 class Process {
 public:
     // Running list of all processes
-    static Process processes;
+    static Process *background_processes;
 
     Process();
     Process(const char* command_name, char* const* command_args, pid_t pid);
 
-    static bool add_to_processes(Process* process);
-    static bool remove_from_processes(pid_t pid);
+    static bool add_to_background_processes(Process* process);
+    static bool remove_from_background_processes(pid_t pid);
 
     void setup_and_exec_process(bool foregound);
 

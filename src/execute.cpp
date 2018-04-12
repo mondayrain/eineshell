@@ -130,8 +130,16 @@ int call(std::vector<std::string> tokens) {
         if(foreground_command) {
             pid_t child_pid = waitpid(pid, &status, 0);
         } else {
-            // TODO:
-            // Keep track of background job somehow
+            // We need to keep track of background processes
+            Process *p = nullptr;
+            if (tokens.size() > 1) {
+                p = new Process(command_name, &args_array[0], pid);
+            } else {
+                p = new Process(command_name, empty_argv, pid);
+            }
+
+            Process::add_to_background_processes(p);
+            printf("\n[%d] Running %s in the background\n", pid, command_name);
         }
         if(status != 0) {
             if(WIFSIGNALED(status)) {

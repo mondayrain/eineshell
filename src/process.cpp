@@ -8,16 +8,29 @@
 #include "process.h"
 #include "shell.h"
 
+Process* Process::background_processes = nullptr;
+
 Process::Process() {}
 Process::Process(const char* command_name, char* const* command_args, pid_t pid)
         : next_process(nullptr), command_name(command_name), command_args(command_args), pid(pid) {}
 
-bool Process::add_to_processes(Process* process) {
-    // TODO: Add process to running list of processes
-    return true;
+bool Process::add_to_background_processes(Process* new_process) {
+    if (background_processes == nullptr) {
+        background_processes = new_process;
+        return true;
+    }
 
+    Process* curr = background_processes;
+    while(curr->next_process != nullptr) {
+        curr = curr->next_process;
+    }
+
+    curr->next_process = new_process;
+
+    return true;
 }
-bool Process::remove_from_processes(pid_t pid) {
+
+bool Process::remove_from_background_processes(pid_t pid) {
     // TODO: Remove process from running list of processes
     return true;
 }
