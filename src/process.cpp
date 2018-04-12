@@ -15,6 +15,38 @@ Process::Process() {}
 Process::Process(const char* command_name, char* const* command_args, pid_t pid)
         : next_process(nullptr), command_name(command_name), command_args(command_args), pid(pid) {}
 
+void Process::print_background_processes() {
+    /** TODO: We should have callbacks or something to detect if the status of a process has changed.
+    * As it is, we can't do stuff like suspend jobs.
+    */
+
+    Process* curr = background_processes;
+    int retval = 0;
+    // Delete the ones that don't actually exist anymore
+    while(curr != nullptr) {
+        // Check if the process actually exists on the system
+        retval = kill(curr->pid, 0);
+        if (retval != 0) {
+            // Process doesn't exist! delete this node in the linked list
+            Process* temp = curr;
+            curr = curr->next_process;
+            delete temp;
+        } else {
+            curr = curr->next_process;
+        }
+    }
+
+    // Print the processes
+    curr = background_processes;
+    while(curr != nullptr) {
+        printf("[%d] %s\n", curr->pid, curr->command_name);
+        curr = curr->next_process;
+    }
+
+    printf("\n");
+
+}
+
 bool Process::add_to_background_processes(Process* new_process) {
     if (background_processes == nullptr) {
         background_processes = new_process;

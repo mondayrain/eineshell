@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include "environment.h"
+#include "process.h"
 
 using std::string;
 using std::vector;
@@ -95,6 +96,14 @@ int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::
     }
 
     printf("\n");
+    return 0;
+}
+
+int processes() {
+    /**
+     * Print all the running background processes
+     */
+    Process::print_background_processes();
     return 0;
 }
 

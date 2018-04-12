@@ -13,6 +13,7 @@ public:
     Process();
     Process(const char* command_name, char* const* command_args, pid_t pid);
 
+    static void print_background_processes();
     static bool add_to_background_processes(Process* process);
     static bool remove_from_background_processes(pid_t pid);
 
