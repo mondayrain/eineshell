@@ -3,13 +3,12 @@
 #include <libgen.h>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "environment.h"
 
 using std::string;
 using std::vector;
 using std::distance;
-
-#include<iostream>
 using std::cout;
 
 /*-----------------*/

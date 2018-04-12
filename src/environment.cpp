@@ -9,7 +9,6 @@
 int MAX_USERNAME_LENGTH = 64;
 int MAX_PATH_LENGTH = 255;
 
-// TODO: Clean this up, we don't need a bunch of these
 std::map<std::string, std::string> ENV_VARS_MAP = {
         { std::string("PROMPT"), "|EINESHELL|" },
         { std::string("USERNAME"), "" },
