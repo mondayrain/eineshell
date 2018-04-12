@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
@@ -48,6 +49,10 @@ void Process::setup_and_exec_process(bool foreground) {
     // of the terminal.
     if (!foreground) {
         setpgid (this->pid, this->pid);
+
+        // Prevent the process from writing to stdout
+        int devNull = open("/dev/null", O_WRONLY);
+        dup2(devNull, STDOUT_FILENO);
     }
 
     // The child inherits signal handling from the spawning process.

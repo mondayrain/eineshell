@@ -139,7 +139,7 @@ int call(std::vector<std::string> tokens) {
             }
 
             Process::add_to_background_processes(p);
-            printf("\n[%d] Running %s in the background\n", pid, command_name);
+            printf("\n[+%d] '%s'\n", pid, command_name);
         }
         if(status != 0) {
             if(WIFSIGNALED(status)) {
