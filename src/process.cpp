@@ -29,18 +29,13 @@ void Process::setup_and_exec_process(bool foreground) {
  * argument it should call.
 // */
 
-      // TODO: None of this works...
-//    // If we want the child to be able to take control
-//    // of the terminal *without* the parent, then it has to have its own
-//    // process group id
-//    setpgid(this->pid, this->pid);
-//
-//    // If the parent launched the child with the intent of
-//    // making it the foreground process, then let it take control
-//    // of the terminal.
-//    if (foreground) {
-//        tcsetpgrp(terminal_fd, this->pid);
-//    }
+    // If the parent launched the child with the intent of
+    // making it a background process, then make it a different process group
+    // so that Ctrl-C doesn't kill it even if it's supposed to be in the background
+    // of the terminal.
+    if (!foreground) {
+        setpgid (this->pid, this->pid);
+    }
 
     // The child inherits signal handling from the spawning process.
     // Since the spawning process is a shell (which ignores stuff like SIGINT in order
