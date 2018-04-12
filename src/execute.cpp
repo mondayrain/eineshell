@@ -5,9 +5,11 @@
 #include <errno.h>
 #include <string>
 #include <algorithm>
+#include "shell.h"
 #include "environment.h"
 #include "execute.h"
 #include "builtin.h"
+#include "process.h"
 #include "helpers.h"
 
 using std::string;
@@ -76,6 +78,12 @@ int call_built_in_with_args(std::string command_name, std::vector<std::string>::
 
 
 int call(std::vector<std::string> tokens) {
+    /**
+     * This method calls a non-builtin program that we expect to
+     * be found in the PATH. In order to support process control,
+     * we make sure to set the proper process group IDs after fork/exec.
+     */
+
     char *command_name = (char *) tokens[0].c_str();
     char *empty_argv[] = { command_name, NULL };
     std::vector<char*> args_array;
@@ -99,25 +107,18 @@ int call(std::vector<std::string> tokens) {
     // Fork returns 0 to the child and the pid of the child to the parent.
     if(pid == 0){
         // CHILD
-        int retval;
+
+        // Create the Process object to be used (& //TODO: stored)
+        Process p = Process();
         if (tokens.size() > 1) {
-            retval = execvp(command_name,  &args_array[0]);
+            p = Process(command_name, &args_array[0], pid);
         } else {
-            retval = execvp(command_name, empty_argv);
+            p = Process(command_name, empty_argv, pid);
         }
 
-        if(retval == -1) {
-            // TODO: Why aren't these returning what I expect?
-            if (errno == 2) {
-                printf("ERROR: Could not find program '%s'\n", command_name);
-            } else if (errno == EACCES) {
-                printf("ERROR: You do not have permission to run '%s'\n", command_name);
-            } else {
-                printf("ERROR: Could not run program '%s'; error number returned: %d\n", command_name, errno);
-            }
-            exit(EXIT_FAILURE);
-        }
-        exit(EXIT_SUCCESS);
+        // Launch the process
+        // TODO: Currently always runs it in the foreground
+        p.setup_and_exec_process(true);
     } else {
         // PARENT
         int status = 0;

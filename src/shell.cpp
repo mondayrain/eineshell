@@ -5,6 +5,8 @@
 
 #include "shell.h"
 
+// TODO: Make Shell a class with static vars instead of having global vars
+
 // We consider the default file descriptor for stdin the fd for the terminal
 int terminal_fd = STDIN_FILENO;
 int terminal_fd_is_tty;
