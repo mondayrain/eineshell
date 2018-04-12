@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <signal.h>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -65,6 +66,27 @@ int printenv(std::vector<std::string>::iterator args_begin, std::vector<std::str
 
 // TODO: setenv method.
 // See: https://www.gnu.org/software/libc/manual/html_node/Environment-Access.html#Environment-Access
+
+int internal_kill(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) {
+    int num_args = std::distance(args_begin, args_end);
+
+    if (num_args != 1) {
+        printf("USAGE: kill [PID]\n\n");
+    } else {
+        // Try to convert string into an int
+        try {
+            pid_t pid = std::stoi(*args_begin, nullptr);
+            int retval = kill(pid, SIGTERM);
+            if (retval == ESRCH) {
+                printf("Couldn't find process with PID %d", pid);
+            }
+        } catch (const std::invalid_argument& ia) {
+            printf("USAGE: kill [PID]\n\n");
+        }
+    }
+
+    return 0;
+}
 
 int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) {
     int num_args = std::distance(args_begin, args_end);
