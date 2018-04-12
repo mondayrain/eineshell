@@ -83,7 +83,7 @@ int call(std::vector<std::string> tokens) {
      * be found in the PATH. In order to support process control,
      * we make sure to set the proper process group IDs after fork/exec.
      */
-
+    bool foreground_command = true;
     char *command_name = (char *) tokens[0].c_str();
     char *empty_argv[] = { command_name, NULL };
     std::vector<char*> args_array;
@@ -94,6 +94,11 @@ int call(std::vector<std::string> tokens) {
         } else { 
             std::transform(tokens.begin(), tokens.end(), std::back_inserter(args_array), convert);
         }
+    }
+
+    // If we're running a background job, don't bother waiting
+    if(tokens[tokens.size()-1] == "&") {
+        foreground_command = false;
     }
 
     // Fork and execute!
@@ -107,7 +112,6 @@ int call(std::vector<std::string> tokens) {
     // Fork returns 0 to the child and the pid of the child to the parent.
     if(pid == 0){
         // CHILD
-
         // Create the Process object to be used (& //TODO: stored)
         Process p = Process();
         if (tokens.size() > 1) {
@@ -117,17 +121,10 @@ int call(std::vector<std::string> tokens) {
         }
 
         // Launch the process
-        // TODO: Currently always runs it in the foreground
-        p.setup_and_exec_process(true);
+        p.setup_and_exec_process(foreground_command);
     } else {
         // PARENT
         int status = 0;
-
-        // If we're running a background job, don't bother waiting
-        if(tokens[tokens.size()-1] == "&") {
-            // TODO: Remove this when proper job control is implemented
-            return 0;
-        }
 
         pid_t child_pid = waitpid(pid, &status, 0);
         if(status != 0) {

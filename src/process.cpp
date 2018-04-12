@@ -32,6 +32,7 @@ void Process::setup_and_exec_process(bool foreground) {
     // making it the foreground process, then let it take control
     // of the terminal.
     if (foreground) {
+        printf("Setting child process running %s as the controlling terminal", this->command_name);
         tcsetpgrp(terminal_fd, this->pid);
     }
 
