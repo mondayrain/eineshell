@@ -77,8 +77,8 @@ int internal_kill(std::vector<std::string>::iterator args_begin, std::vector<std
         try {
             pid_t pid = std::stoi(*args_begin, nullptr);
             int retval = kill(pid, SIGTERM);
-            if (retval == ESRCH) {
-                printf("Couldn't find process with PID %d", pid);
+            if (retval != 0) {
+                printf("Couldn't find process with PID %d\n", pid);
             }
         } catch (const std::invalid_argument& ia) {
             printf("USAGE: kill [PID]\n\n");
@@ -87,6 +87,35 @@ int internal_kill(std::vector<std::string>::iterator args_begin, std::vector<std
 
     return 0;
 }
+
+int internal_fg(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) {
+    int num_args = std::distance(args_begin, args_end);
+
+    if (num_args != 1) {
+        printf("USAGE: fg [PID]\n\n");
+    } else {
+        // Try to convert string into an int
+        try {
+            pid_t pid = std::stoi(*args_begin, nullptr);
+            int retval = kill(pid, 0);
+            if (retval != 0) {
+                printf("Couldn't find process with PID %d\n", pid);
+            } else {
+                // Restore child's ability to write to STDOUT
+                kill(pid, SIGALRM);
+
+                // Make the child process part of the shell's group ID again
+                // so it can receive signals
+                setpgid (pid, getgid());
+            }
+        } catch (const std::invalid_argument& ia) {
+            printf("USAGE: kill [PID]\n\n");
+        }
+    }
+
+    return 0;
+}
+
 
 int cd(std::vector<std::string>::iterator args_begin, std::vector<std::string>::iterator args_end) {
     int num_args = std::distance(args_begin, args_end);

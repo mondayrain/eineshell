@@ -9,6 +9,10 @@
 #include "process.h"
 #include "shell.h"
 
+int old_stdout;
+
+static void fg_sig_handler(int signo);
+
 Process* Process::background_processes = nullptr;
 
 Process::Process() {}
@@ -87,7 +91,14 @@ void Process::setup_and_exec_process(bool foreground) {
 
         // Prevent the process from writing to stdout
         int devNull = open("/dev/null", O_WRONLY);
+        old_stdout = dup(STDOUT_FILENO);
         dup2(devNull, STDOUT_FILENO);
+
+        // A little cheat... we have no way right now to change
+        // the process's STDOUT back to the one we currently have
+        // We'll use the SIGALRM signal to receive a message from
+        // the shell that we should be going back to the foreground
+        signal(SIGALRM, &fg_sig_handler);
     }
 
     // The child inherits signal handling from the spawning process.
@@ -119,4 +130,15 @@ void Process::setup_and_exec_process(bool foreground) {
     exit(EXIT_SUCCESS);
 }
 
+void fg_sig_handler(int signo) {
+    if (signo == SIGALRM) {
+        // Change file descriptor back to STDOUT
+        dup2(old_stdout, STDOUT_FILENO);
+
+        printf("\nChild restored stdout\n");
+
+        // Reset signal handler since we're back in the fg
+        signal(SIGALRM, SIG_DFL);
+    }
+}
 
